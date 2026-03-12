@@ -1,0 +1,320 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/gen_features.json",
+  "title": "Dynamic Trees Gen Features Reference",
+  "description": "Reference for all available gen features and their properties",
+  "definitions": {
+    "featureReference": {
+      "oneOf": [
+        { "type": "string", "description": "Feature name using defaults" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "properties": { "type": "object" }
+          },
+          "required": ["name"]
+        }
+      ]
+    },
+    "fruit": {
+      "type": "object",
+      "description": "Generates fruits on the tree",
+      "properties": {
+        "name": { "const": "fruit" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "fruit": { "type": "string", "description": "Fruit reference" },
+            "quantity": { "type": "integer", "description": "Number of fruits to place" },
+            "ray_distance": { "type": "number", "description": "Search ray distance" },
+            "fruiting_radius": { "type": "integer", "description": "Minimum branch radius for fruiting" }
+          }
+        }
+      }
+    },
+    "pod": {
+      "type": "object",
+      "description": "Generates pods on branches",
+      "properties": {
+        "name": { "const": "pod" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "pod": { "type": "string", "description": "Pod reference" },
+            "quantity": { "type": "integer" },
+            "place_chance": { "type": "number" }
+          }
+        }
+      }
+    },
+    "vines": {
+      "type": "object",
+      "description": "Adds vines to the tree",
+      "properties": {
+        "name": { "const": "vines" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "quantity": { "type": "integer", "default": 4, "description": "Number of vine clusters" },
+            "max_length": { "type": "integer", "default": 8, "description": "Maximum vine length" },
+            "vertical_spread": { "type": "integer", "default": 2, "description": "Vertical spread distance" },
+            "ray_distance": { "type": "number", "default": 5.0, "description": "Search ray distance" },
+            "block": { "type": "string", "default": "vine", "description": "Vine block to place" },
+            "tip_block": { "type": "string", "description": "Different block for vine tips" },
+            "vine_type": {
+              "type": "string",
+              "enum": ["SIDE", "CEILING", "FLOOR"],
+              "default": "SIDE",
+              "description": "Vine growth direction"
+            },
+            "fruiting_radius": { "type": "integer", "description": "Minimum branch radius" }
+          }
+        }
+      }
+    },
+    "bee_nest": {
+      "type": "object",
+      "description": "Adds bee nests to the tree",
+      "properties": {
+        "name": { "const": "bee_nest" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "nest_block": { "type": "string", "description": "Bee nest block" },
+            "max_height": { "type": "integer", "description": "Maximum placement height" },
+            "max_count": { "type": "integer", "description": "Maximum nests per tree" },
+            "can_grow_predicate": { "type": "object", "description": "Custom growth predicate" },
+            "world_gen_chance_function": { "type": "object", "description": "Custom world gen chance" }
+          }
+        }
+      }
+    },
+    "shroomlight": {
+      "type": "object",
+      "description": "Adds shroomlights (for nether fungi)",
+      "properties": {
+        "name": { "const": "shroomlight" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "block": { "type": "string", "description": "Shroomlight block" }
+          }
+        }
+      }
+    },
+    "conifer_topper": {
+      "type": "object",
+      "description": "Adds conifer top decoration",
+      "properties": {
+        "name": { "const": "conifer_topper" },
+        "properties": { "type": "object" }
+      }
+    },
+    "mound": {
+      "type": "object",
+      "description": "Creates dirt mound at base",
+      "properties": {
+        "name": { "const": "mound" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "mound_block": { "type": "string", "description": "Block for mound" }
+          }
+        }
+      }
+    },
+    "roots": {
+      "type": "object",
+      "description": "Generates surface roots",
+      "properties": {
+        "name": { "const": "roots" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "root_block": { "type": "string" },
+            "min_trunk_radius": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "clear_volume": {
+      "type": "object",
+      "description": "Clears space for tree generation",
+      "properties": {
+        "name": { "const": "clear_volume" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "height": { "type": "integer" },
+            "radius": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "bottom_flare": {
+      "type": "object",
+      "description": "Creates trunk flare at base",
+      "properties": {
+        "name": { "const": "bottom_flare" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "flares": { "type": "integer", "description": "Number of flare blocks" }
+          }
+        }
+      }
+    },
+    "undergrowth": {
+      "type": "object",
+      "description": "Spawns undergrowth trees nearby",
+      "properties": {
+        "name": { "const": "undergrowth" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "undergrowth_species": { "type": "string", "description": "Primary undergrowth species" },
+            "secondary_undergrowth_species": { "type": "string", "description": "Secondary species" }
+          }
+        }
+      }
+    },
+    "podzol": {
+      "type": "object",
+      "description": "Converts surrounding soil to podzol",
+      "properties": {
+        "name": { "const": "podzol" },
+        "properties": { "type": "object" }
+      }
+    },
+    "bush": {
+      "type": "object",
+      "description": "Creates bush variant of tree",
+      "properties": {
+        "name": { "const": "bush" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "biome_predicate": { "type": "object" }
+          }
+        }
+      }
+    },
+    "huge_mushroom": {
+      "type": "object",
+      "description": "Spawns a huge mushroom nearby",
+      "properties": {
+        "name": { "const": "huge_mushroom" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "mushroom_block": { "type": "string" }
+          }
+        }
+      }
+    },
+    "huge_mushrooms": {
+      "type": "object",
+      "description": "Spawns multiple mushroom types",
+      "properties": {
+        "name": { "const": "huge_mushrooms" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "red_mushroom_chance": { "type": "number" },
+            "brown_mushroom_chance": { "type": "number" }
+          }
+        }
+      }
+    },
+    "mushroom_rot": {
+      "type": "object",
+      "description": "Spawns mushrooms when tree rots",
+      "properties": {
+        "name": { "const": "mushroom_rot" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "mushroom": { "type": "string", "default": "brown_mushroom", "description": "Primary mushroom block" },
+            "alternate_mushroom": { "type": "string", "default": "red_mushroom", "description": "Secondary mushroom" },
+            "alternate_mushroom_chance": { "type": "number", "default": 0.25, "description": "Chance for alternate mushroom" }
+          }
+        }
+      }
+    },
+    "rot_soil": {
+      "type": "object",
+      "description": "Changes soil when tree fully rots",
+      "properties": {
+        "name": { "const": "rot_soil" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "rotten_soil": { "type": "string", "description": "Block to replace soil with" }
+          },
+          "required": ["rotten_soil"]
+        }
+      }
+    },
+    "biome_predicate": {
+      "type": "object",
+      "description": "Conditional feature based on biome",
+      "properties": {
+        "name": { "const": "biome_predicate" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "biome_predicate": { "type": "object", "description": "Biome selection criteria" },
+            "gen_feature": { "$ref": "#/definitions/featureReference", "description": "Feature to apply if matched" },
+            "only_world_gen": { "type": "boolean", "description": "Only during world gen" }
+          }
+        }
+      }
+    },
+    "random_predicate": {
+      "type": "object",
+      "description": "Random chance conditional feature",
+      "properties": {
+        "name": { "const": "random_predicate" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "chance": { "type": "number", "description": "Chance for feature to apply" },
+            "gen_feature": { "$ref": "#/definitions/featureReference" },
+            "only_world_gen": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "alt_leaves": {
+      "type": "object",
+      "description": "Alternative leaves blocks on tree",
+      "properties": {
+        "name": { "const": "alt_leaves" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "alternative_leaves": { "type": "string", "description": "Alternative leaves properties" },
+            "alternative_leaves_block": { "type": "string", "description": "Alternative leaves block" }
+          }
+        }
+      }
+    },
+    "root_system": {
+      "type": "object",
+      "description": "Underground root system generation",
+      "properties": {
+        "name": { "const": "root_system" },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "min_trunk_radius": { "type": "integer" }
+          }
+        }
+      }
+    }
+  },
+  "type": "array",
+  "items": { "$ref": "#/definitions/featureReference" }
+}
+

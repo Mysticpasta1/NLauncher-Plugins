@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dynamic Trees JSON Schema Mapping",
+  "description": "IDE configuration for Dynamic Trees JSON schemas in JetBrains IDEs",
+  "fileMatch": [
+    {
+      "pattern": "**/trees/*/species/*.json",
+      "schema": ".github/schemas/species-schema.json"
+    },
+    {
+      "pattern": "**/trees/*/families/*.json",
+      "schema": ".github/schemas/family-schema.json"
+    },
+    {
+      "pattern": "**/trees/*/leaves_properties/*.json",
+      "schema": ".github/schemas/leaves_properties-schema.json"
+    },
+    {
+      "pattern": "**/trees/*/fruits/*.json",
+      "schema": ".github/schemas/fruit-schema.json"
+    },
+    {
+      "pattern": "**/trees/*/pods/*.json",
+      "schema": ".github/schemas/pod-schema.json"
+    },
+    {
+      "pattern": "**/trees/*/soil_properties/*.json",
+      "schema": ".github/schemas/soil_properties-schema.json"
+    },
+    {
+      "pattern": "**/trees/*/world_gen/default.json",
+      "schema": ".github/schemas/world_gen-schema.json"
+    },
+    {
+      "pattern": "**/trees/*/world_gen/feature_cancellers.json",
+      "schema": ".github/schemas/feature_cancellers-schema.json"
+    }
+  ],
+  "note": "To enable these schemas in JetBrains Rider/IntelliJ: Settings > Languages & Frameworks > Schemas and DTDs > JSON Schema Mappings"
+}
+

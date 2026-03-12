@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/soil_properties.json",
+  "title": "Dynamic Trees Soil Properties",
+  "description": "Defines rooty dirt blocks and their behavior",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Soil type",
+      "enum": ["default", "spreadable"],
+      "default": "default"
+    },
+    "primitive_soil": {
+      "type": "string",
+      "description": "The vanilla dirt/soil block"
+    },
+    "substitute_soil": {
+      "type": "string",
+      "description": "Use another soil's block instead of generating a new one"
+    },
+    "acceptable_soils": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Soil adjectives this belongs to (e.g., 'dirt_like', 'sand_like')",
+      "examples": [
+        ["dirt_like"],
+        ["sand_like"],
+        ["gravel_like"],
+        ["water_like"],
+        ["mud_like"],
+        ["nether_like"],
+        ["end_like"],
+        ["fungus_like"],
+        ["terracotta_like"],
+        ["stone_like"],
+        ["snow_like"],
+        ["moss_like"]
+      ]
+    },
+    "foliage_tint_index": {
+      "type": "integer",
+      "description": "Tint index for foliage overlay",
+      "minimum": -1
+    },
+    "roots_tint_index": {
+      "type": "integer",
+      "description": "Tint index for roots",
+      "minimum": -1
+    },
+    "block_registry_name": {
+      "type": "string",
+      "description": "Custom block registry name"
+    },
+    "only_if_loaded": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Only load if specified mod(s) are loaded"
+    },
+    "model_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override models by key"
+    },
+    "texture_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override textures by key"
+    },
+    "required_light": {
+      "type": "integer",
+      "description": "(spreadable type) Light level needed for spreading",
+      "minimum": 0,
+      "maximum": 15
+    },
+    "spread_item": {
+      "type": "string",
+      "description": "(spreadable type) Item that triggers spreading"
+    },
+    "spreadable_soils": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "(spreadable type) Soils this can spread to become"
+    }
+  },
+  "required": ["primitive_soil"]
+}
+

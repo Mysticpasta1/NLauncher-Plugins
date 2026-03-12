@@ -1,0 +1,316 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/species.json",
+  "title": "Dynamic Trees Species",
+  "description": "Defines a tree species with its growth behavior and properties",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Species type",
+      "enum": ["default", "underground_roots"],
+      "default": "default"
+    },
+    "family": {
+      "type": "string",
+      "description": "Reference to the tree family (e.g., 'oak', 'dynamictrees:oak')"
+    },
+    "leaves_properties": {
+      "type": "string",
+      "description": "Reference to leaves properties"
+    },
+    "tapering": {
+      "type": "number",
+      "description": "Branch tapering factor (0.0-1.0, lower = more taper)",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "up_probability": {
+      "type": "integer",
+      "description": "Probability weight for growing upward",
+      "minimum": 0
+    },
+    "lowest_branch_height": {
+      "type": "integer",
+      "description": "Minimum height for first branch",
+      "minimum": 0
+    },
+    "signal_energy": {
+      "type": "number",
+      "description": "Growth energy (higher = larger trees)",
+      "minimum": 0
+    },
+    "growth_rate": {
+      "type": "number",
+      "description": "How fast the tree grows (0.0-1.0)",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "soil_longevity": {
+      "type": "integer",
+      "description": "Soil fertility duration in ticks",
+      "minimum": 0
+    },
+    "max_branch_radius": {
+      "type": "integer",
+      "description": "Override family's max branch radius",
+      "minimum": 1,
+      "maximum": 24
+    },
+    "growth_logic_kit": {
+      "oneOf": [
+        { "type": "string", "description": "Growth logic kit name" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "properties": { "type": "object" }
+          },
+          "required": ["name"]
+        }
+      ],
+      "description": "Growth pattern definition"
+    },
+    "world_gen_leaf_map_height": {
+      "type": "integer",
+      "description": "Leaf map height for world generation"
+    },
+    "seed": {
+      "type": "string",
+      "description": "Custom seed item registry name"
+    },
+    "generate_seed": {
+      "type": "boolean",
+      "description": "Whether to generate a seed item",
+      "default": true
+    },
+    "generate_sapling": {
+      "type": "boolean",
+      "description": "Whether to generate a sapling block",
+      "default": true
+    },
+    "seed_name": {
+      "type": "string",
+      "description": "Custom seed display name"
+    },
+    "sapling_name": {
+      "type": "string",
+      "description": "Custom sapling display name"
+    },
+    "seed_composter_chance": {
+      "type": "number",
+      "description": "Composter chance for seeds (0.0-1.0)",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "primitive_sapling": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "properties": {
+            "sapling": { "type": "string" },
+            "count": { "type": "integer" }
+          }
+        }
+      ],
+      "description": "Link to vanilla sapling for recipes"
+    },
+    "primitive_saplings": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "properties": {
+              "sapling": { "type": "string" },
+              "count": { "type": "integer" }
+            }
+          }
+        ]
+      },
+      "description": "Multiple primitive saplings for recipes"
+    },
+    "mega_species": {
+      "type": "string",
+      "description": "Reference to mega variant species"
+    },
+    "can_craft_mega_seed": {
+      "type": "boolean",
+      "description": "Allow crafting mega seeds from regular seeds"
+    },
+    "tint_sapling": {
+      "type": "boolean",
+      "description": "Apply color tinting to sapling"
+    },
+    "sapling_grows_naturally": {
+      "type": "boolean",
+      "description": "If sapling can grow without bone meal"
+    },
+    "sapling_sound": {
+      "type": "string",
+      "description": "Sound type for sapling placement"
+    },
+    "sapling_shape": {
+      "type": "string",
+      "description": "Sapling collision shape (e.g., 'slim_sapling')"
+    },
+    "common_override": {
+      "type": "object",
+      "description": "Override as common species for specific biomes"
+    },
+    "can_bone_meal_tree": {
+      "type": "boolean",
+      "description": "Allow bone meal on grown tree"
+    },
+    "acceptable_growth_blocks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Additional blocks tree can grow on"
+    },
+    "acceptable_soils": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Soil types for planting (e.g., 'dirt_like', 'sand_like')"
+    },
+    "world_gen_acceptable_soils": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Soil types for world generation"
+    },
+    "force_soil": {
+      "type": "string",
+      "description": "Force specific soil properties"
+    },
+    "fruits": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Fruit definitions/references to add to species"
+    },
+    "pods": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Pod definitions/references to add to species"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string", "description": "Feature name using defaults" },
+          {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "description": "Feature name" },
+              "properties": { "type": "object", "description": "Feature configuration" }
+            },
+            "required": ["name"]
+          }
+        ]
+      },
+      "description": "Gen features for tree generation"
+    },
+    "does_rot": {
+      "type": "boolean",
+      "description": "If tree rots when not connected to soil"
+    },
+    "drop_seeds": {
+      "type": "boolean",
+      "description": "If tree drops seeds naturally"
+    },
+    "preferred_climate": {
+      "type": "string",
+      "description": "Preferred climate zone",
+      "enum": ["tropical", "temperate", "coniferous"]
+    },
+    "seasonal_offsets": {
+      "type": "object",
+      "properties": {
+        "fruiting": { "type": "number", "minimum": 0, "maximum": 1 },
+        "seed_drop": { "type": "number", "minimum": 0, "maximum": 1 },
+        "growth": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "description": "Seasonal timing adjustments (0.0=spring, 0.25=summer, 0.5=fall, 0.75=winter)"
+    },
+    "climate_tolerance": {
+      "type": "number",
+      "description": "Tolerance for non-preferred climates (0.0-1.0)",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "big_tree_sound_threshold": {
+      "type": "number",
+      "description": "Volume threshold for big tree falling sounds"
+    },
+    "plantable_on_fluid": {
+      "type": "boolean",
+      "description": "Can be planted on water/fluids (for mangroves)"
+    },
+    "allowed_water_height_for_world_gen": {
+      "type": "integer",
+      "description": "Maximum water depth for world generation",
+      "minimum": 0
+    },
+    "always_show_on_waila": {
+      "type": "boolean",
+      "description": "Always show species in Jade/WAILA"
+    },
+    "only_if_loaded": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Only load if specified mod(s) are loaded"
+    },
+    "model_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override models by key"
+    },
+    "texture_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override textures by key"
+    },
+    "lang_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override translation keys"
+    },
+    "root_tapering": {
+      "type": "number",
+      "description": "(underground_roots type) Tapering for root system",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "root_signal_energy": {
+      "type": "number",
+      "description": "(underground_roots type) Growth energy for roots"
+    },
+    "roots_growth_logic_kit": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object" }
+      ],
+      "description": "(underground_roots type) Growth logic for roots"
+    },
+    "root_growth_multiplier": {
+      "type": "integer",
+      "description": "(underground_roots type) Root growth speed multiplier"
+    },
+    "min_world_gen_height_offset": {
+      "type": "integer",
+      "description": "(underground_roots type) Minimum trunk height offset"
+    },
+    "max_world_gen_height_offset": {
+      "type": "integer",
+      "description": "(underground_roots type) Maximum trunk height offset"
+    },
+    "update_soil_on_water_radius": {
+      "type": "integer",
+      "description": "(underground_roots type) Water detection radius for soil updates"
+    }
+  },
+  "required": ["family"]
+}
+

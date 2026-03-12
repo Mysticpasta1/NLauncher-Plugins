@@ -1,0 +1,14 @@
+﻿{
+  "id": "TreePackEditor",
+  "name": "Dynamic Trees TreePack Editor",
+  "description": "Visual editor for creating and editing Dynamic Trees tree packs with schema validation",
+  "version": "0.0.1",
+  "author": "NLauncher",
+  "website": "https://github.com/Nyfaria/NLauncher",
+  "minLauncherVersion": "0.2.0",
+  "entryPoint": "TreePackEditor.dll",
+  "mainClass": "TreePackEditor.TreePackEditorPlugin",
+  "permissions": [],
+  "dependencies": []
+}
+

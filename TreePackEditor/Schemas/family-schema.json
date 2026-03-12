@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/family.json",
+  "title": "Dynamic Trees Family",
+  "description": "Defines a tree family (wood type) with its log blocks and properties",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Family type",
+      "enum": ["default", "underground_roots"],
+      "default": "default"
+    },
+    "common_leaves": {
+      "type": "string",
+      "description": "Reference to leaves properties used by this family"
+    },
+    "common_species": {
+      "type": "string",
+      "description": "Reference to the primary species for this family"
+    },
+    "max_branch_radius": {
+      "type": "integer",
+      "description": "Maximum branch radius (default: 8, up to 24 for giant trees)",
+      "minimum": 1,
+      "maximum": 24,
+      "default": 8
+    },
+    "primitive_log": {
+      "type": "string",
+      "description": "Vanilla log block (e.g., 'oak_log', 'minecraft:oak_log')"
+    },
+    "primitive_stripped_log": {
+      "type": "string",
+      "description": "Vanilla stripped log block"
+    },
+    "stick": {
+      "type": "string",
+      "description": "Item dropped when breaking small branches"
+    },
+    "generate_surface_root": {
+      "type": "boolean",
+      "description": "Generate surface root blocks",
+      "default": false
+    },
+    "generate_stripped_branch": {
+      "type": "boolean",
+      "description": "Generate stripped branch variant",
+      "default": true
+    },
+    "fire_proof": {
+      "type": "boolean",
+      "description": "If true, branches don't burn",
+      "default": false
+    },
+    "primary_thickness": {
+      "type": "integer",
+      "description": "Thickness of primary (main) branches",
+      "minimum": 1
+    },
+    "secondary_thickness": {
+      "type": "integer",
+      "description": "Thickness of secondary branches",
+      "minimum": 1
+    },
+    "branch_is_ladder": {
+      "type": "boolean",
+      "description": "If branches can be climbed like ladders",
+      "default": false
+    },
+    "max_signal_depth": {
+      "type": "integer",
+      "description": "Maximum depth for growth signals",
+      "minimum": 1
+    },
+    "loot_volume_multiplier": {
+      "type": "number",
+      "description": "Multiplier for log drops when tree is felled",
+      "minimum": 0
+    },
+    "min_radius_for_stripping": {
+      "type": "integer",
+      "description": "Minimum radius to strip with axe",
+      "minimum": 1
+    },
+    "reduce_radius_when_stripping": {
+      "type": "boolean",
+      "description": "If stripping reduces branch radius"
+    },
+    "branch_properties": {
+      "type": "object",
+      "description": "Block properties for branches",
+      "properties": {
+        "destroy_time": { "type": "number" },
+        "explosion_resistance": { "type": "number" },
+        "map_color": { "type": "string" },
+        "sound": { "type": "string" },
+        "requires_correct_tool_for_drops": { "type": "boolean" }
+      }
+    },
+    "only_if_loaded": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Only load if specified mod(s) are loaded"
+    },
+    "texture_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override textures by key"
+    },
+    "model_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override models by key"
+    },
+    "lang_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override translation keys"
+    },
+    "primitive_root": {
+      "type": "string",
+      "description": "(underground_roots type) Base root block"
+    },
+    "primitive_filled_root": {
+      "type": "string",
+      "description": "(underground_roots type) Filled root block"
+    },
+    "primitive_covered_root": {
+      "type": "string",
+      "description": "(underground_roots type) Covered root block"
+    },
+    "default_soil": {
+      "type": "string",
+      "description": "(underground_roots type) Default soil for aerial roots"
+    },
+    "root_system_acceptable_soils": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "(underground_roots type) Soils roots can grow through"
+    }
+  }
+}
+

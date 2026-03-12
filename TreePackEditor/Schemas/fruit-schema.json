@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/fruit.json",
+  "title": "Dynamic Trees Fruit",
+  "description": "Defines fruits that grow under tree leaves",
+  "type": "object",
+  "properties": {
+    "max_age": {
+      "type": "integer",
+      "description": "Number of growth stages (default: 3)",
+      "minimum": 1,
+      "default": 3
+    },
+    "item_stack": {
+      "oneOf": [
+        { "type": "string", "description": "Item registry name" },
+        {
+          "type": "object",
+          "properties": {
+            "item": { "type": "string" },
+            "count": { "type": "integer", "minimum": 1 }
+          },
+          "required": ["item"]
+        }
+      ],
+      "description": "Item dropped when harvested"
+    },
+    "drop_count": {
+      "type": "integer",
+      "description": "Fixed number of items dropped",
+      "minimum": 1
+    },
+    "min_drop_count": {
+      "type": "integer",
+      "description": "Minimum random drops",
+      "minimum": 0
+    },
+    "max_drop_count": {
+      "type": "integer",
+      "description": "Maximum random drops",
+      "minimum": 1
+    },
+    "block_shapes": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "function": {
+                "type": "string",
+                "const": "fruit",
+                "description": "Shape function type"
+              },
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "width": { "type": "number", "description": "Width in pixels (16 = full block)" },
+                  "height": { "type": "number", "description": "Height in pixels" },
+                  "stem_length": { "type": "number", "description": "Stem length in pixels" }
+                },
+                "required": ["width", "height"]
+              }
+            },
+            "required": ["function", "parameters"]
+          },
+          {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 6,
+            "maxItems": 6,
+            "description": "Raw VoxelShape [minX, minY, minZ, maxX, maxY, maxZ]"
+          }
+        ]
+      },
+      "description": "VoxelShapes for each growth stage"
+    },
+    "can_bone_meal": {
+      "type": "boolean",
+      "description": "Allow bone meal to grow fruit",
+      "default": true
+    },
+    "growth_chance": {
+      "type": "number",
+      "description": "Natural growth chance per tick",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "required_production_factor": {
+      "type": "number",
+      "description": "Required seasonal production factor",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "mature_action": {
+      "type": "string",
+      "description": "Action when fruit reaches maturity",
+      "enum": ["NONE", "DROP", "ROT", "CUSTOM"],
+      "default": "NONE"
+    },
+    "block_registry_name": {
+      "type": "string",
+      "description": "Custom block registry name"
+    },
+    "block_properties": {
+      "type": "object",
+      "description": "Custom block properties",
+      "properties": {
+        "destroy_time": { "type": "number" },
+        "explosion_resistance": { "type": "number" },
+        "sound": { "type": "string" },
+        "light_emission": { "type": "integer", "minimum": 0, "maximum": 15 }
+      }
+    }
+  },
+  "required": ["item_stack"]
+}
+

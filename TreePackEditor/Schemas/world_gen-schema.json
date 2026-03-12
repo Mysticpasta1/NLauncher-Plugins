@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/world_gen.json",
+  "title": "Dynamic Trees World Generation",
+  "description": "Defines how trees spawn in biomes",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "_comment": {
+        "type": "string",
+        "description": "Optional comment for documentation"
+      },
+      "_comment1": { "type": "string" },
+      "_comment2": { "type": "string" },
+      "_note": { "type": "string" },
+      "select": {
+        "oneOf": [
+          { "type": "string", "description": "Direct biome name" },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Regex pattern for biome names"
+              },
+              "tag": {
+                "type": "string",
+                "description": "Biome tag (supports | for OR)"
+              }
+            }
+          }
+        ],
+        "description": "Biome selection criteria"
+      },
+      "apply": {
+        "type": "object",
+        "properties": {
+          "species": {
+            "oneOf": [
+              { "type": "string", "description": "Species name" },
+              {
+                "type": "object",
+                "properties": {
+                  "random": {
+                    "type": "object",
+                    "additionalProperties": { "type": "number" },
+                    "description": "Weighted random species selection"
+                  }
+                }
+              }
+            ],
+            "description": "Species to generate"
+          },
+          "density": {
+            "oneOf": [
+              { "type": "number" },
+              { "type": "array", "items": { "type": "number" } },
+              {
+                "type": "object",
+                "properties": {
+                  "math": {
+                    "type": "object",
+                    "description": "Math expression for density"
+                  }
+                }
+              }
+            ],
+            "description": "Tree density (0.0-2.0+)"
+          },
+          "chance": {
+            "oneOf": [
+              { "type": "number", "minimum": 0, "maximum": 1 },
+              { "type": "string", "enum": ["standard"] }
+            ],
+            "description": "Generation chance (0.0-1.0 or 'standard')"
+          },
+          "forestness": {
+            "type": "number",
+            "description": "How forest-like (affects density calculations)",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "multipass": {
+            "oneOf": [
+              { "type": "boolean" },
+              {
+                "type": "object",
+                "description": "Custom multipass configuration"
+              }
+            ],
+            "description": "Enable multipass generation for denser forests"
+          },
+          "blacklist": {
+            "type": "boolean",
+            "description": "If true, prevents tree generation"
+          },
+          "heightmap": {
+            "type": "string",
+            "description": "Heightmap type for placement",
+            "enum": ["MOTION_BLOCKING", "MOTION_BLOCKING_NO_LEAVES", "OCEAN_FLOOR", "WORLD_SURFACE"]
+          },
+          "cave_rooted": {
+            "type": "object",
+            "properties": {
+              "species": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "object" }
+                ],
+                "description": "Species for cave-rooted generation"
+              },
+              "chance": {
+                "oneOf": [
+                  { "type": "number" },
+                  { "type": "object" }
+                ],
+                "description": "Generation chance"
+              },
+              "generate_on_surface": {
+                "type": "boolean",
+                "description": "Also generate on surface"
+              },
+              "max_dist_to_surface": {
+                "type": "integer",
+                "description": "Maximum distance from surface"
+              }
+            },
+            "description": "Cave-rooted tree generation (azalea-style)"
+          }
+        },
+        "description": "Properties to apply to selected biomes"
+      },
+      "white": {
+        "type": "string",
+        "description": "Whitelist type ('all' or 'selected')",
+        "enum": ["all", "selected"]
+      },
+      "suppress_none_selected": {
+        "type": "boolean",
+        "description": "Suppress warning when no biomes are selected"
+      }
+    },
+    "required": ["select"]
+  }
+}
+

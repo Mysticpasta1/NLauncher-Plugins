@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/pod.json",
+  "title": "Dynamic Trees Pod",
+  "description": "Defines pods that grow on the side of branches (like cocoa)",
+  "type": "object",
+  "properties": {
+    "max_age": {
+      "type": "integer",
+      "description": "Number of growth stages",
+      "minimum": 1,
+      "default": 3
+    },
+    "minimum_radius": {
+      "type": "integer",
+      "description": "Minimum branch radius to attach",
+      "minimum": 1
+    },
+    "maximum_radius": {
+      "type": "integer",
+      "description": "Maximum branch radius to attach",
+      "minimum": 1
+    },
+    "item_stack": {
+      "oneOf": [
+        { "type": "string", "description": "Item registry name" },
+        {
+          "type": "object",
+          "properties": {
+            "item": { "type": "string" },
+            "count": { "type": "integer", "minimum": 1 }
+          },
+          "required": ["item"]
+        }
+      ],
+      "description": "Item dropped when harvested"
+    },
+    "drop_count": {
+      "type": "integer",
+      "description": "Fixed drop count",
+      "minimum": 1
+    },
+    "min_drop_count": {
+      "type": "integer",
+      "description": "Minimum random drops",
+      "minimum": 0
+    },
+    "max_drop_count": {
+      "type": "integer",
+      "description": "Maximum random drops",
+      "minimum": 1
+    },
+    "block_shapes": {
+      "type": "object",
+      "description": "VoxelShapes per direction and age",
+      "properties": {
+        "north": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/podShape" }
+        },
+        "south": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/podShape" }
+        },
+        "east": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/podShape" }
+        },
+        "west": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/podShape" }
+        }
+      }
+    },
+    "can_bone_meal": {
+      "type": "boolean",
+      "description": "Allow bone meal",
+      "default": true
+    },
+    "growth_chance": {
+      "type": "number",
+      "description": "Natural growth chance",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "required_production_factor": {
+      "type": "number",
+      "description": "Required seasonal factor",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "mature_action": {
+      "type": "string",
+      "description": "Action when mature",
+      "enum": ["NONE", "DROP", "ROT", "CUSTOM"],
+      "default": "NONE"
+    },
+    "flower_hold_period_length": {
+      "type": "integer",
+      "description": "Ticks to hold flower stage before growing",
+      "minimum": 0
+    },
+    "block_registry_name": {
+      "type": "string",
+      "description": "Custom block registry name"
+    },
+    "block_properties": {
+      "type": "object",
+      "description": "Custom block properties"
+    }
+  },
+  "definitions": {
+    "podShape": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "const": "pod"
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "width": { "type": "number" },
+                "height": { "type": "number" },
+                "stem_length": { "type": "number" },
+                "side_offset": { "type": "number" },
+                "side": {
+                  "type": "string",
+                  "enum": ["north", "south", "east", "west"]
+                }
+              },
+              "required": ["width", "height", "side"]
+            }
+          },
+          "required": ["function", "parameters"]
+        },
+        {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 6,
+          "maxItems": 6
+        }
+      ]
+    }
+  },
+  "required": ["item_stack"]
+}
+

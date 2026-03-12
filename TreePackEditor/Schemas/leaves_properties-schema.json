@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/leaves_properties.json",
+  "title": "Dynamic Trees Leaves Properties",
+  "description": "Defines the behavior and appearance of tree leaves",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Leaves type",
+      "enum": ["default", "palm", "scruffy"],
+      "default": "default"
+    },
+    "primitive_leaves": {
+      "type": "string",
+      "description": "The vanilla leaves block (e.g., 'minecraft:oak_leaves')"
+    },
+    "color": {
+      "oneOf": [
+        { "type": "string", "description": "Color multiplier name (e.g., 'birch', 'spruce')" },
+        { "type": "integer", "description": "Hex color value" }
+      ],
+      "description": "Color tint for the leaves"
+    },
+    "cell_kit": {
+      "type": "string",
+      "description": "Cell kit for leaf behavior",
+      "examples": ["dynamictrees:deciduous", "dynamictrees:conifer", "dynamictrees:acacia", "dynamictrees:dark_oak", "dynamictrees:palm", "dynamictrees:nether_fungus", "dynamictrees:azalea", "dynamictrees:bare"]
+    },
+    "smother": {
+      "type": "integer",
+      "description": "Maximum hydration for smothering leaves (default: 4)",
+      "minimum": 0,
+      "maximum": 7
+    },
+    "light_requirement": {
+      "type": "integer",
+      "description": "Minimum light level for leaves to survive",
+      "minimum": 0,
+      "maximum": 15
+    },
+    "fire_spread": {
+      "type": "integer",
+      "description": "Fire spread speed",
+      "minimum": 0
+    },
+    "flammability": {
+      "type": "integer",
+      "description": "How flammable the leaves are",
+      "minimum": 0
+    },
+    "connect_any_radius": {
+      "type": "boolean",
+      "description": "If true, connects to any branch radius",
+      "default": false
+    },
+    "requires_shears": {
+      "type": "boolean",
+      "description": "If true, requires shears to harvest",
+      "default": true
+    },
+    "ageing_configuration": {
+      "type": "string",
+      "description": "When leaves age/decay",
+      "enum": ["ALWAYS", "NEVER", "WORLDGEN_ONLY"],
+      "default": "ALWAYS"
+    },
+    "can_grow_on_ground": {
+      "type": "boolean",
+      "description": "If leaves can grow directly on ground"
+    },
+    "has_tick_particles": {
+      "type": "boolean",
+      "description": "If leaves emit particles"
+    },
+    "water_resistant": {
+      "type": "boolean",
+      "description": "If leaves survive underwater"
+    },
+    "generate_block": {
+      "type": "boolean",
+      "description": "If true, generates a dynamic leaves block",
+      "default": true
+    },
+    "block_registry_name": {
+      "type": "string",
+      "description": "Custom registry name for the leaves block"
+    },
+    "family": {
+      "type": "string",
+      "description": "Reference to tree family (usually set automatically)"
+    },
+    "only_if_loaded": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Only load if specified mod(s) are loaded"
+    },
+    "seed_drop_chances": {
+      "type": "array",
+      "items": { "type": "number", "minimum": 0, "maximum": 1 },
+      "description": "Drop chances per hydration level"
+    },
+    "texture_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override textures by key"
+    },
+    "model_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override models by key"
+    },
+    "lang_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Override translation keys"
+    },
+    "sound": {
+      "type": "string",
+      "description": "Sound type for the leaves"
+    },
+    "scruffy_leaf_chance": {
+      "type": "number",
+      "description": "(scruffy type) Chance for leaves to render (0.0-1.0)",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "scruffy_max_hydro": {
+      "type": "integer",
+      "description": "(scruffy type) Maximum hydration for scruffy behavior",
+      "minimum": 0,
+      "maximum": 7
+    },
+    "frond_model_loader": {
+      "type": "string",
+      "description": "(palm type) Resource location for custom frond model"
+    }
+  },
+  "required": ["primitive_leaves"]
+}
+

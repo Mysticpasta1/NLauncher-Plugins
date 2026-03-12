@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dynamictrees.com/schemas/feature_cancellers.json",
+  "title": "Dynamic Trees Feature Cancellation",
+  "description": "Prevents vanilla tree features from spawning",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "__comment": {
+        "type": "string",
+        "description": "Optional comment"
+      },
+      "select": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "tag": { "type": "string" }
+            }
+          }
+        ],
+        "description": "Biome selection criteria"
+      },
+      "cancellers": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Feature type to cancel",
+            "enum": ["tree", "rooted_tree", "fungus", "huge_mushroom"]
+          },
+          "types": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Multiple feature types to cancel"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Mod namespace to cancel (e.g., 'minecraft')"
+          },
+          "namespaces": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Multiple namespaces to cancel"
+          },
+          "stage": {
+            "type": "string",
+            "description": "Generation stage to cancel",
+            "enum": [
+              "RAW_GENERATION",
+              "LAKES",
+              "LOCAL_MODIFICATIONS",
+              "UNDERGROUND_STRUCTURES",
+              "SURFACE_STRUCTURES",
+              "STRONGHOLDS",
+              "UNDERGROUND_ORES",
+              "UNDERGROUND_DECORATION",
+              "FLUID_SPRINGS",
+              "VEGETAL_DECORATION",
+              "TOP_LAYER_MODIFICATION"
+            ]
+          },
+          "stages": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Multiple generation stages to cancel"
+          }
+        },
+        "description": "Feature cancellation configuration"
+      }
+    },
+    "required": ["select", "cancellers"]
+  }
+}
+
