@@ -1,0 +1,184 @@
+﻿# NLauncher Plugin Security Review
+# This workflow runs on PRs to scan submitted plugins for potential security issues
+
+name: Plugin Security Review
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/plugin.json'
+      - '**/*.cs'
+      - '**/*.dll'
+
+jobs:
+  validate-manifest:
+    name: Validate Plugin Manifest
+    runs-on: ubuntu-latest
+    outputs:
+      plugin_folder: ${{ steps.detect.outputs.folder }}
+      repository_url: ${{ steps.validate.outputs.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect Changed Plugin
+        id: detect
+        run: |
+          # Get list of changed folders containing plugin.json
+          CHANGED_FOLDERS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "plugin.json" | xargs -I {} dirname {} | sort -u)
+          echo "Changed plugin folders: $CHANGED_FOLDERS"
+          echo "folder=$CHANGED_FOLDERS" >> $GITHUB_OUTPUT
+
+      - name: Validate plugin.json
+        id: validate
+        run: |
+          for folder in ${{ steps.detect.outputs.folder }}; do
+            if [ -f "$folder/plugin.json" ]; then
+              echo "Validating $folder/plugin.json..."
+              
+              # Check required fields
+              ID=$(jq -r '.id // empty' "$folder/plugin.json")
+              NAME=$(jq -r '.name // empty' "$folder/plugin.json")
+              REPO=$(jq -r '.repository // empty' "$folder/plugin.json")
+              VERSION=$(jq -r '.version // empty' "$folder/plugin.json")
+              AUTHOR=$(jq -r '.author // empty' "$folder/plugin.json")
+              
+              if [ -z "$ID" ]; then
+                echo "::error::Missing required field 'id' in $folder/plugin.json"
+                exit 1
+              fi
+              
+              if [ -z "$NAME" ]; then
+                echo "::error::Missing required field 'name' in $folder/plugin.json"
+                exit 1
+              fi
+              
+              if [ -z "$REPO" ]; then
+                echo "::error::Missing required field 'repository' in $folder/plugin.json - all plugins must provide source code URL"
+                exit 1
+              fi
+              
+              if [ -z "$VERSION" ]; then
+                echo "::error::Missing required field 'version' in $folder/plugin.json"
+                exit 1
+              fi
+              
+              # Validate repository URL format
+              if [[ ! "$REPO" =~ ^https://github.com/ ]]; then
+                echo "::error::Repository URL must be a GitHub URL (https://github.com/...)"
+                exit 1
+              fi
+              
+              echo "✅ $folder/plugin.json is valid"
+              echo "   ID: $ID"
+              echo "   Name: $NAME"
+              echo "   Version: $VERSION"
+              echo "   Repository: $REPO"
+              echo "repository=$REPO" >> $GITHUB_OUTPUT
+            fi
+          done
+
+  scan-source-repo:
+    name: Scan Source Repository
+    needs: validate-manifest
+    runs-on: ubuntu-latest
+    if: needs.validate-manifest.outputs.repository_url != ''
+    steps:
+      - name: Clone Plugin Source
+        run: |
+          echo "Cloning source from: ${{ needs.validate-manifest.outputs.repository_url }}"
+          git clone --depth 1 ${{ needs.validate-manifest.outputs.repository_url }} plugin-source
+
+      - name: Security Scan with Copilot
+        uses: github/copilot-security-scan@v1
+        continue-on-error: true
+        with:
+          path: plugin-source
+
+      - name: Check for Suspicious Patterns
+        run: |
+          echo "🔍 Scanning for suspicious code patterns..."
+          
+          ISSUES_FOUND=0
+          
+          # Check for network calls to suspicious endpoints
+          if grep -rn "WebClient\|HttpClient" plugin-source --include="*.cs" | grep -v "github.com\|nuget.org\|microsoft.com"; then
+            echo "::warning::Found HTTP client usage - review network calls"
+          fi
+          
+          # Check for file system access outside expected paths
+          if grep -rn "Environment.GetFolderPath\|Directory.Delete\|File.Delete" plugin-source --include="*.cs"; then
+            echo "::warning::Found file system operations - review for safety"
+          fi
+          
+          # Check for process execution
+          if grep -rn "Process.Start\|ProcessStartInfo\|System.Diagnostics.Process" plugin-source --include="*.cs"; then
+            echo "::warning::Found process execution code - requires manual review"
+            ISSUES_FOUND=1
+          fi
+          
+          # Check for reflection/dynamic loading
+          if grep -rn "Assembly.Load\|Activator.CreateInstance\|Type.GetType" plugin-source --include="*.cs"; then
+            echo "::warning::Found dynamic code loading - review carefully"
+          fi
+          
+          # Check for registry access
+          if grep -rn "Microsoft.Win32.Registry\|RegistryKey" plugin-source --include="*.cs"; then
+            echo "::warning::Found registry access - review for safety"
+          fi
+          
+          # Check for credential/token patterns
+          if grep -rn "password\|secret\|token\|apikey\|api_key" plugin-source --include="*.cs" -i; then
+            echo "::warning::Found potential credential handling - review for security"
+          fi
+          
+          echo ""
+          echo "📋 Scan complete. Review warnings above."
+          
+          if [ $ISSUES_FOUND -gt 0 ]; then
+            echo "::notice::This plugin requires manual security review before merging"
+          fi
+
+  comment-review:
+    name: Post Review Comment
+    needs: [validate-manifest, scan-source-repo]
+    runs-on: ubuntu-latest
+    if: always()
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Post Comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const manifest = '${{ needs.validate-manifest.outputs.repository_url }}';
+            
+            let body = '## 🔍 Plugin Security Review\n\n';
+            
+            if (manifest) {
+              body += '✅ **Manifest validated**\n';
+              body += `📦 Source repository: ${manifest}\n\n`;
+              body += '### Automated Checks\n';
+              body += 'The following automated security checks were performed:\n';
+              body += '- ✅ Required fields present (id, name, version, repository)\n';
+              body += '- ✅ Repository URL is valid GitHub URL\n';
+              body += '- 🔍 Source code scanned for suspicious patterns\n\n';
+              body += '### Manual Review Required\n';
+              body += 'A maintainer should:\n';
+              body += '1. Review the source repository for malicious code\n';
+              body += '2. Verify the DLL matches the source code\n';
+              body += '3. Check for any obfuscated or suspicious code\n';
+            } else {
+              body += '❌ **Manifest validation failed**\n';
+              body += 'Please ensure your plugin.json includes all required fields.\n';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
