@@ -2,7 +2,7 @@
   "id": "DiscordRPC",
   "name": "Discord Rich Presence",
   "description": "Shows your NLauncher activity on your Discord profile",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "NLauncher",
   "website": "https://github.com/Nyfaria/NLauncher",
   "repository": "https://github.com/Nyfaria/NLauncher-Plugins",

@@ -2,7 +2,7 @@
   "id": "TreePackEditor",
   "name": "Dynamic Trees TreePack Editor",
   "description": "Visual editor for creating and editing Dynamic Trees tree packs with schema validation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "NLauncher",
   "repository": "https://github.com/Nyfaria/NLauncher",
   "website": "https://github.com/Nyfaria/NLauncher",
