@@ -5,12 +5,12 @@
     "address": "185.236.138.121",
     "gamePort": 25565,
     "syncPort": 25580,
-    "website": null,
+    "website": "https://nyfaria.com",
     "discord": null,
     "owner": "Nyfaria",
     "tags": ["modded", "tinkers-construct", "create", "decoration"],
-    "minecraftVersion": "",
-    "modLoader": "",
-    "featured": false
+    "minecraftVersion": "1.18.2",
+    "modLoader": "forge",
+    "featured": true
 }
 
